@@ -1,4 +1,11 @@
 package com.diosa.service.user;
 
-public interface IUserService {
+import com.diosa.model.user.User;
+import com.diosa.service.IBaseService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.Optional;
+
+public interface IUserService extends IBaseService<User>, UserDetailsService {
+    Optional<User> findByUsername(String username);
 }
