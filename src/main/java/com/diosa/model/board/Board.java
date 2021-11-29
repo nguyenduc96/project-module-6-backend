@@ -1,7 +1,7 @@
 package com.diosa.model.board;
 
 import com.diosa.model.Common;
-import com.diosa.model.group.Project;
+import com.diosa.model.project.Project;
 import lombok.Data;
 
 import javax.persistence.*;

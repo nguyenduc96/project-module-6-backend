@@ -1,4 +1,4 @@
-package com.diosa.model.group;
+package com.diosa.model.project;
 
 import com.diosa.model.Common;
 import com.diosa.model.user.User;
