@@ -2,7 +2,10 @@ package com.diosa.model;
 
 import lombok.Data;
 
+import javax.persistence.MappedSuperclass;
+
 @Data
+@MappedSuperclass
 public class Common {
     private String updateAt;
 

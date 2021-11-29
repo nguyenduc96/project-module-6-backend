@@ -1,17 +1,13 @@
 package com.diosa.model.board;
 
 import com.diosa.model.Common;
-import com.diosa.model.group.Group;
-import lombok.AllArgsConstructor;
+import com.diosa.model.group.Project;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 public class Board extends Common {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +16,7 @@ public class Board extends Common {
     private String title;
 
     @ManyToOne
-    private Group group;
+    private Project project;
 }
 
 

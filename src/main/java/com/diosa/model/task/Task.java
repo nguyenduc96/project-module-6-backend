@@ -3,16 +3,13 @@ package com.diosa.model.task;
 import com.diosa.model.Common;
 import com.diosa.model.label.Label;
 import com.diosa.model.status.Status;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 public class Task extends Common {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +28,6 @@ public class Task extends Common {
     @ManyToOne
     private Status status;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<Label> labels;
 }
