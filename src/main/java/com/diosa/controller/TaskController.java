@@ -2,6 +2,7 @@ package com.diosa.controller;
 
 import com.diosa.model.status.Status;
 import com.diosa.model.task.Task;
+import com.diosa.service.status.IStatusService;
 import com.diosa.service.task.ITaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ public class TaskController {
     @Autowired
     private ITaskService taskService;
 
+    @Autowired
+    private IStatusService statusService;
 
     @GetMapping
     public ResponseEntity<Iterable<Task>> findAll() {
@@ -31,7 +34,13 @@ public class TaskController {
 
     @PostMapping("/status/{statusId}")
     public ResponseEntity<Task> dropTask(@PathVariable Long statusId, @RequestBody Task task) {
+        Optional<Status> status = statusService.findById(statusId);
+        if(!status.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        task.setStatus(status.get());
         Task task1 = taskService.save(task);
+        return new ResponseEntity<>(task1, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

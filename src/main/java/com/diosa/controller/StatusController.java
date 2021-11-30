@@ -15,7 +15,6 @@ import java.util.Optional;
 @CrossOrigin("*")
 public class StatusController {
 
-
     @Autowired
     private StatusService statusService;
 
