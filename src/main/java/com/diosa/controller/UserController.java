@@ -1,9 +1,6 @@
 package com.diosa.controller;
 
-import com.diosa.model.user.JwtResponse;
-import com.diosa.model.user.User;
-import com.diosa.model.user.UserPrinciple;
-import com.diosa.model.user.UserRequest;
+import com.diosa.model.user.*;
 import com.diosa.service.JwtService;
 import com.diosa.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -53,6 +52,11 @@ public class UserController {
         String avatar = times + file.getOriginalFilename();
         FileCopyUtils.copy(file.getBytes(), new File(fileUpload + avatar));
         user.setAvatar(avatar);
+        List<Role> roles = new ArrayList<>();
+        Role role = new Role();
+        role.setId(2L);
+        roles.add(role);
+        user.setRoles(roles);
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
