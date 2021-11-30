@@ -3,6 +3,7 @@ package com.diosa.model.user;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,4 +21,7 @@ public class User {
     private String email;
 
     private String avatar;
+
+    @ManyToMany
+    private List<Role> roles;
 }

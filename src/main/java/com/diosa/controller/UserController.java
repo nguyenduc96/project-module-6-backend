@@ -69,7 +69,8 @@ public class UserController {
         JwtResponse jwtResponse = new JwtResponse(
                 token,
                 currentUser.getId(),
-                currentUser.getUsername());
+                currentUser.getUsername(),
+                userPrinciple.getAuthorities());
         return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
     }
 }

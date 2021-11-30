@@ -18,6 +18,9 @@ public class Project extends Common {
 
     private Long type;
 
+    @ManyToOne
+    private User projectOwner;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<User> users;
 }
