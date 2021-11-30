@@ -15,7 +15,7 @@ public class TaskService implements ITaskService{
 
     @Override
     public Iterable<Task> findAll() {
-        return taskRepository.findAll();
+        return taskRepository.findAllByOrderByPositionAsc();
     }
 
     @Override
@@ -31,5 +31,10 @@ public class TaskService implements ITaskService{
     @Override
     public void remove(Long id) {
         taskRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Task> findAllByStatusIdOrderByPositionAsc(Long statusId) {
+        return taskRepository.findAllByStatusIdOrderByPositionAsc(statusId);
     }
 }
