@@ -1,6 +1,7 @@
 package com.diosa.controller;
 
 import com.diosa.model.board.Board;
+import com.diosa.model.board.BoardResponse;
 import com.diosa.service.board.IBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,12 @@ public class BoardController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Board> getBoard(@PathVariable Long id) {
+    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long id) {
         Optional<Board> boardOptional = boardService.findById(id);
-        return boardOptional.map(board -> new ResponseEntity<>(board, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if(!boardOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(boardService.findBoardById(id),  HttpStatus.OK);
     }
 
     @PostMapping
