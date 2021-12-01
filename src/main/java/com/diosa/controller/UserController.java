@@ -41,17 +41,33 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/register")
-    public ResponseEntity<User> register(UserRequest userRequest) throws IOException {
-        User user = new User();
-        user.setUsername(userRequest.getUsername());
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        user.setEmail(userRequest.getEmail());
-        MultipartFile file = userRequest.getAvatar();
+    @PostMapping("/set-avatar")
+    public ResponseEntity<?> setAvatar(@RequestParam("avatar") MultipartFile file) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+        User user = userService.findByUsername(userPrinciple.getUsername()).get();
         long times = new Date().getTime();
         String avatar = times + file.getOriginalFilename();
         FileCopyUtils.copy(file.getBytes(), new File(fileUpload + avatar));
         user.setAvatar(avatar);
+        userService.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/set-password")
+    public ResponseEntity<?> setPassword(@RequestBody User user) {
+        return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody UserRequest userRequest) {
+        User user = new User();
+        user.setUsername(userRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setEmail(userRequest.getEmail());
+        if (userRequest.getAvatar() == null) {
+            user.setAvatar("static/images/avatar-default.jpg");
+        }
         List<Role> roles = new ArrayList<>();
         Role role = new Role();
         role.setId(2L);
