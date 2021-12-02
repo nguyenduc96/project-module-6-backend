@@ -42,13 +42,10 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/set-avatar")
-    public ResponseEntity<?> setAvatar(@RequestParam("avatar") MultipartFile file) throws IOException {
+    public ResponseEntity<?> setAvatar(@RequestBody String avatar) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         User user = userService.findByUsername(userPrinciple.getUsername()).get();
-        long times = new Date().getTime();
-        String avatar = times + file.getOriginalFilename();
-        FileCopyUtils.copy(file.getBytes(), new File(fileUpload + avatar));
         user.setAvatar(avatar);
         userService.save(user);
         return new ResponseEntity<>(HttpStatus.OK);
