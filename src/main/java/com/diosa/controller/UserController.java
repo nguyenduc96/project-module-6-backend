@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,17 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Value("${file-upload}")
-    private String fileUpload;
-
     @Autowired
     private IUserService userService;
 
@@ -42,13 +38,20 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/set-avatar")
-    public ResponseEntity<?> setAvatar(@RequestBody String avatar) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<User> setAvatar(@RequestBody String avatar, Authentication authentication) {
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         User user = userService.findByUsername(userPrinciple.getUsername()).get();
+        avatar = avatar.replace("\"","");
         user.setAvatar(avatar);
         userService.save(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-user")
+    public ResponseEntity<User> getUser(Authentication authentication) {
+        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+        User user = userService.findByUsername(userPrinciple.getUsername()).get();
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/set-password")
@@ -63,9 +66,9 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setEmail(userRequest.getEmail());
         if (userRequest.getAvatar() == null) {
-            user.setAvatar("static/images/avatar-default.jpg");
+            user.setAvatar("https://www.donkey.bike/wp-content/uploads/2020/12/user-member-avatar-face-profile-icon-vector-22965342-e1608640557889.jpg");
         }
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
         Role role = new Role();
         role.setId(2L);
         roles.add(role);
