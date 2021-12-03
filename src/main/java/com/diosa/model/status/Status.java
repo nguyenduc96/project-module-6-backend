@@ -13,7 +13,7 @@ public class Status extends Common {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String title;   
 
     private int position;
 
