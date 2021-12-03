@@ -5,7 +5,9 @@ import com.diosa.repository.IProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+
 @Service
 public class ProjectService implements IProjectService{
 
@@ -30,5 +32,10 @@ public class ProjectService implements IProjectService{
     @Override
     public void remove(Long id) {
         projectRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Project> findProjectByUserId(Long userId) {
+        return projectRepository.findProjectByUserId(userId);
     }
 }
