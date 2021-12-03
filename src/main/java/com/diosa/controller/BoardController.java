@@ -2,6 +2,7 @@ package com.diosa.controller;
 
 import com.diosa.model.board.Board;
 import com.diosa.service.board.IBoardService;
+import com.diosa.service.project.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/boards")
 public class BoardController {
 
     @Autowired
