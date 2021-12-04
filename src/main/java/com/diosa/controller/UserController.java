@@ -49,13 +49,13 @@ public class UserController {
     public ResponseEntity<User> setAvatar(@RequestBody String avatar, Authentication authentication) {
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         User user = userService.findByUsername(userPrinciple.getUsername()).get();
-        avatar = avatar.replace("\"","");
+        avatar = avatar.replace("\"", "");
         user.setAvatar(avatar);
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/get-user")
+    @GetMapping("/user-info")
     public ResponseEntity<User> getUser(Authentication authentication) {
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         User user = userService.findByUsername(userPrinciple.getUsername()).get();
@@ -95,6 +95,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
         );

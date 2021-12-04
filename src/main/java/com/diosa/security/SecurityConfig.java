@@ -55,11 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/**");
 
-        http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
-
         http.authorizeRequests()
-                .antMatchers("/user/login", "/user/register", "/user/check-unique")
-                .permitAll().anyRequest().authenticated()
+                .antMatchers( "/**").permitAll()
                 .and().csrf().disable();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -67,6 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
 
         http.cors();
     }
