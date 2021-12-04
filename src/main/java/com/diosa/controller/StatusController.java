@@ -32,11 +32,6 @@ public class StatusController {
         return new ResponseEntity<>(statusService.findById(id).get(), HttpStatus.OK);
     }
 
-//    @GetMapping("/boards/{boardId}")
-//    public ResponseEntity<List<Status>> getStatusByBoardId(@PathVariable Long boardId) {
-//        return new ResponseEntity<>(statusService.findAllByBoardIdOrderByPositionAsc(boardId), HttpStatus.OK);
-//    }
-
     @PostMapping
     public ResponseEntity<Status> createStatus(@RequestBody Status status){
         return new ResponseEntity<>(statusService.save(status), HttpStatus.CREATED);
