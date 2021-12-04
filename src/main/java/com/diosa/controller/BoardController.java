@@ -1,6 +1,7 @@
 package com.diosa.controller;
 
 import com.diosa.model.board.Board;
+import com.diosa.model.board.BoardResponse;
 import com.diosa.service.board.IBoardService;
 import com.diosa.service.project.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,12 @@ public class BoardController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Board> getBoard(@PathVariable Long id) {
+    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long id) {
         Optional<Board> boardOptional = boardService.findById(id);
-        return boardOptional.map(board -> new ResponseEntity<>(board, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if(!boardOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(boardService.findBoardById(id),  HttpStatus.OK);
     }
 
     @PostMapping
@@ -34,18 +38,17 @@ public class BoardController {
         return new ResponseEntity<>(boardService.save(board), HttpStatus.OK);
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<Board> editBoard(@PathVariable Long id, @RequestBody Board board) {
         Optional<Board> boardOptional = boardService.findById(id);
         if (!boardOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         board.setId(id);
-        boardService.save(board);
-        return new ResponseEntity<>(board, HttpStatus.OK);
+        return new ResponseEntity<>(boardService.save(board),HttpStatus.OK);
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Board> delete(@PathVariable Long id) {
         Optional<Board> boardOptional = boardService.findById(id);
         if (!boardOptional.isPresent()) {
