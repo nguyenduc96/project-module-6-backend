@@ -22,6 +22,15 @@ public class LabelController {
         return new ResponseEntity<>(this.labelService.findAllByBoardId(boardId), HttpStatus.OK) ;
     }
 
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Label> getById(@PathVariable Long id) {
+        Optional<Label> labelOptional = labelService.findById(id);
+        if (!labelOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(labelService.findById(id).get(), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Label> addNewLabel(@RequestBody Label label) {
         return new ResponseEntity<>(this.labelService.save(label), HttpStatus.CREATED);
