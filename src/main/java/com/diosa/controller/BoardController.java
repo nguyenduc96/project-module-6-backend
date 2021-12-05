@@ -37,7 +37,7 @@ public class BoardController {
         return new ResponseEntity<>(boardService.save(board), HttpStatus.OK);
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<Board> editBoard(@PathVariable Long id, @RequestBody Board board) {
         Optional<Board> boardOptional = boardService.findById(id);
         if (!boardOptional.isPresent()) {
@@ -48,7 +48,7 @@ public class BoardController {
         return new ResponseEntity<>(board, HttpStatus.OK);
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Board> delete(@PathVariable Long id) {
         Optional<Board> boardOptional = boardService.findById(id);
         if (!boardOptional.isPresent()) {

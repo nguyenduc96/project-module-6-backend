@@ -55,8 +55,16 @@ public class UserController {
     }
 
     @PostMapping("/set-password")
-    public ResponseEntity<?> setPassword(@RequestBody User user) {
-        return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+    public ResponseEntity<?> setPassword(@RequestBody ChangePassword changePassword, Authentication authentication) {
+        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+        User user = userService.findByUsername(userPrinciple.getUsername()).get();
+        if (passwordEncoder.matches(changePassword.getOldPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
+            userService.save(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/register")

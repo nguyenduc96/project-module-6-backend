@@ -1,5 +1,6 @@
 package com.diosa.model.label;
 
+import com.diosa.model.board.Board;
 import com.diosa.model.color.Color;
 import lombok.Data;
 
@@ -13,6 +14,9 @@ public class Label {
     private Long id;
 
     private String content;
+
+    @ManyToOne
+    private Board board;
 
     @OneToOne
     private Color color;

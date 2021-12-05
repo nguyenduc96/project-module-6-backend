@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,11 +31,6 @@ public class StatusController {
         }
         return new ResponseEntity<>(statusService.findById(id).get(), HttpStatus.OK);
     }
-
-//    @GetMapping("/boards/{boardId}")
-//    public ResponseEntity<List<Status>> getStatusByBoardId(@PathVariable Long boardId) {
-//        return new ResponseEntity<>(statusService.findAllByBoardIdOrderByPositionAsc(boardId), HttpStatus.OK);
-//    }
 
     @PostMapping
     public ResponseEntity<Status> createStatus(@RequestBody Status status){

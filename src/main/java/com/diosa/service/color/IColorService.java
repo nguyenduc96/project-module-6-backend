@@ -1,4 +1,7 @@
 package com.diosa.service.color;
 
-public interface IColorService {
+import com.diosa.model.color.Color;
+import com.diosa.service.IBaseService;
+
+public interface IColorService extends IBaseService<Color> {
 }

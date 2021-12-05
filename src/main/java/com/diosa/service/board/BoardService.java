@@ -3,6 +3,7 @@ package com.diosa.service.board;
 import com.diosa.model.board.Board;
 import com.diosa.model.board.BoardResponse;
 import com.diosa.repository.IBoardRepository;
+import com.diosa.service.label.ILabelService;
 import com.diosa.service.status.IStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class BoardService implements IBoardService{
 
     @Autowired
     private IStatusService statusService;
+
+    @Autowired
+    private ILabelService labelService;
 
     @Override
     public Iterable<Board> findAll() {
@@ -35,6 +39,8 @@ public class BoardService implements IBoardService{
 
     @Override
     public void remove(Long id) {
+        labelService.deleteAllByBoardId(id);
+        statusService.deleteAllByBoardId(id);
         boardRepository.deleteById(id);
     }
 

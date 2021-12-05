@@ -37,6 +37,7 @@ public class StatusService implements IStatusService {
 
     @Override
     public void remove(Long id) {
+        taskService.deleteAllByStatusId(id);
         statusRepository.deleteById(id);
     }
 
@@ -54,6 +55,11 @@ public class StatusService implements IStatusService {
             statusResponseList.add(statusResponse);
         }
         return statusResponseList;
+    }
+
+    @Override
+    public void deleteAllByBoardId(Long boardId) {
+        statusRepository.deleteAllByBoardId(boardId);
     }
 
     private StatusResponse convertToStatusResponse(Status status) {
