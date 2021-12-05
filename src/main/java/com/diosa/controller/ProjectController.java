@@ -41,6 +41,15 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
+//    @GetMapping("/get-by-project-owner")
+//    public ResponseEntity<List<Project>> getAllByProjectOwner(Authentication authentication) {
+//        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+//        User user = new User();
+//        user.setId(userPrinciple.getId());
+//        List<Project> projects = projectService.findProjectByProjectOwner(user);
+//        return new ResponseEntity<>(projects, HttpStatus.OK);
+//    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProject(@PathVariable Long id, Authentication authentication) {
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
