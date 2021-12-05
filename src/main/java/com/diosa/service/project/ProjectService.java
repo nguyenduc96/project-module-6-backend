@@ -1,5 +1,6 @@
 package com.diosa.service.project;
 
+import com.diosa.model.board.Board;
 import com.diosa.model.project.Project;
 import com.diosa.model.project.ProjectResponse;
 import com.diosa.model.user.User;
@@ -36,6 +37,10 @@ public class ProjectService implements IProjectService{
 
     @Override
     public void remove(Long id) {
+        List<Board> boards = boardService.findAllByProjectId(id);
+        for (Board board : boards) {
+            boardService.remove(board.getId());
+        }
         projectRepository.deleteById(id);
     }
 
