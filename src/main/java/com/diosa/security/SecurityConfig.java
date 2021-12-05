@@ -47,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(10);
     }
 
+    @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
@@ -56,16 +57,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/**");
 
         http.authorizeRequests()
-                .antMatchers( "/**").permitAll()
+                .antMatchers("/", "/**").permitAll()
                 .and().csrf().disable();
+        ;
+
+        http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
-
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
 
         http.cors();
     }

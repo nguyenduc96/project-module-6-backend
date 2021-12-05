@@ -55,8 +55,15 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @GetMapping("/get-user/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        User user = userService.findById(id).get();
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @GetMapping("/user-info")
-    public ResponseEntity<User> getUser(Authentication authentication) {
+    public ResponseEntity<User> getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         User user = userService.findByUsername(userPrinciple.getUsername()).get();
         return new ResponseEntity<>(user, HttpStatus.OK);
