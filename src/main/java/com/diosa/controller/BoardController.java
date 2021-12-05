@@ -3,6 +3,7 @@ package com.diosa.controller;
 import com.diosa.model.board.Board;
 import com.diosa.model.board.BoardResponse;
 import com.diosa.service.board.IBoardService;
+import com.diosa.service.project.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/boards")
 public class BoardController {
 
     @Autowired
@@ -44,8 +45,7 @@ public class BoardController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         board.setId(id);
-        boardService.save(board);
-        return new ResponseEntity<>(board, HttpStatus.OK);
+        return new ResponseEntity<>(boardService.save(board),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

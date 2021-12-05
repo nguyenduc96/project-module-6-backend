@@ -84,4 +84,9 @@ public class UserPrinciple implements UserDetails {
         UserPrinciple that = (UserPrinciple) o;
         return id.equals(that.id);
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

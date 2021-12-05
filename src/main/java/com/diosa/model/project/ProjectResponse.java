@@ -1,27 +1,23 @@
 package com.diosa.model.project;
 
-import com.diosa.model.Common;
+import com.diosa.model.board.Board;
 import com.diosa.model.user.User;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
 @Data
-@Entity
-public class Project extends Common {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProjectResponse {
     private Long id;
 
     private String title;
 
     private Long type;
 
-    @ManyToOne
     private User projectOwner;
 
-    @ManyToMany
     private Set<User> users;
+
+    private List<Board> boards;
 }

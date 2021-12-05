@@ -4,21 +4,15 @@ import com.diosa.model.user.*;
 import com.diosa.service.JwtService;
 import com.diosa.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 @CrossOrigin("*")
@@ -37,18 +31,39 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping("/check-unique")
+    public ResponseEntity<List<UserUnique>> checkUnique() {
+        List<UserUnique> userUniques = new ArrayList<>();
+        Iterable<User> users = userService.findAll();
+        for (User user : users) {
+            UserUnique userUnique = new UserUnique();
+            userUnique.setUsername(user.getUsername());
+            userUnique.setEmail(user.getEmail());
+            userUniques.add(userUnique);
+        }
+        return new ResponseEntity<>(userUniques, HttpStatus.OK);
+    }
+
+
     @PostMapping("/set-avatar")
     public ResponseEntity<User> setAvatar(@RequestBody String avatar, Authentication authentication) {
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         User user = userService.findByUsername(userPrinciple.getUsername()).get();
-        avatar = avatar.replace("\"","");
+        avatar = avatar.replace("\"", "");
         user.setAvatar(avatar);
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/get-user")
-    public ResponseEntity<User> getUser(Authentication authentication) {
+    @GetMapping("/get-user/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        User user = userService.findById(id).get();
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/user-info")
+    public ResponseEntity<User> getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         User user = userService.findByUsername(userPrinciple.getUsername()).get();
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -87,6 +102,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
         );
