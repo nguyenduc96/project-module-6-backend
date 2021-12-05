@@ -8,6 +8,7 @@ import com.diosa.service.status.IStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,6 +43,11 @@ public class BoardService implements IBoardService{
         labelService.deleteAllByBoardId(id);
         statusService.deleteAllByBoardId(id);
         boardRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Board> findAllByProjectId(Long projectId) {
+        return boardRepository.findAllByProjectId(projectId);
     }
 
     @Override
