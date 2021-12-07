@@ -59,7 +59,12 @@ public class StatusService implements IStatusService {
 
     @Override
     public void deleteAllByBoardId(Long boardId) {
+        List<Status> statuses = statusRepository.findAllByBoardId(boardId);
+        for (int i = 0; i < statuses.size() ; i++) {
+            taskService.deleteAllByStatusId(statuses.get(i).getId());
+        }
         statusRepository.deleteAllByBoardId(boardId);
+
     }
 
     private StatusResponse convertToStatusResponse(Status status) {
