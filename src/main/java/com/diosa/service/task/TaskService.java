@@ -1,7 +1,9 @@
 package com.diosa.service.task;
 
 import com.diosa.model.task.Task;
+import com.diosa.repository.ICommentRepository;
 import com.diosa.repository.ITaskRepository;
+import com.diosa.service.comment.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,9 @@ import java.util.Optional;
 public class TaskService implements ITaskService{
     @Autowired
     private ITaskRepository taskRepository;
+
+    @Autowired
+    private ICommentService commentService;
 
     @Override
     public Iterable<Task> findAll() {
@@ -30,6 +35,7 @@ public class TaskService implements ITaskService{
 
     @Override
     public void remove(Long id) {
+        commentService.deleteByTaskId(id);
         taskRepository.deleteById(id);
     }
 
@@ -40,6 +46,10 @@ public class TaskService implements ITaskService{
 
     @Override
     public void deleteAllByStatusId(Long id) {
+        List<Task> tasks = taskRepository.findAllByStatusIdOrderByPositionAsc(id);
+        for (int i = 0; i < tasks.size(); i++) {
+            commentService.deleteByTaskId(tasks.get(i).getId());
+        }
         taskRepository.deleteAllByStatusId(id);
     }
 }
