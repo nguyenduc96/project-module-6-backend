@@ -56,4 +56,14 @@ public class UserService implements IUserService {
     public List<User> findUsersByProjectId(Long projectId) {
         return userRepository.findUsersByProjectId(projectId);
     }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<String>  findAllEmail() {
+        return userRepository.findAllEmail();
+    }
 }

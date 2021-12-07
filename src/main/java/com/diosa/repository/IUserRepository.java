@@ -16,4 +16,10 @@ public interface IUserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM user u JOIN project_users pu ON u.id = pu.users_id WHERE pu.project_id = ?1", nativeQuery = true)
     List<User> findUsersByProjectId(Long projectId);
+
+    @Transactional
+    Optional<User> findByEmail(String email);
+
+    @Query(value = "SELECT u.email FROM user u", nativeQuery = true)
+    List<String>  findAllEmail();
 }

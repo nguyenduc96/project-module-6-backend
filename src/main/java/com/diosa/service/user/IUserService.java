@@ -11,4 +11,8 @@ public interface IUserService extends IBaseService<User>, UserDetailsService {
     Optional<User> findByUsername(String username);
 
     List<User> findUsersByProjectId(Long projectId);
+
+    Optional<User> findByEmail(String email);
+
+    List<String> findAllEmail();
 }
