@@ -85,12 +85,17 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Project> update(@PathVariable Long id, @RequestBody Project project) {
+    public ResponseEntity<Project> update(@PathVariable Long id, @RequestBody Project project, Authentication authentication) {
+        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+        User user = new User();
+        user.setId(userPrinciple.getId());
         Optional<Project> projectOptional = projectService.findById(id);
         if (projectOptional.isPresent()) {
-            projectOptional.get().setTitle(project.getTitle());
-            projectOptional.get().setType(project.getType());
-            projectOptional.get().setUpdateAt(convertDateToString(new Date()));
+            if (projectOptional.get().getProjectOwner().getId().equals(user.getId())) {
+                projectOptional.get().setTitle(project.getTitle());
+                projectOptional.get().setType(project.getType());
+                projectOptional.get().setUpdateAt(convertDateToString(new Date()));
+            }
             return new ResponseEntity<>(projectService.save(projectOptional.get()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -123,12 +128,18 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Project> delete(@PathVariable Long id) {
-        Optional<Project> projectOptional = projectService.findById(id);
-        if (!projectOptional.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> delete(@PathVariable Long id, Authentication authentication) {
+        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+        User user = new User();
+        user.setId(userPrinciple.getId());
+        List<Project> projects = projectService.findProjectByProjectOwner(user);
+        for (Project project : projects) {
+            if (project.getId().equals(id)) {
+                projectService.remove(id);
+                projects = projectService.findProjectByProjectOwner(user);
+                return new ResponseEntity<>(projects, HttpStatus.OK);
+            }
         }
-        projectService.remove(id);
-        return new ResponseEntity<>(projectOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
