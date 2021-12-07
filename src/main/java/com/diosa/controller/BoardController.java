@@ -2,13 +2,18 @@ package com.diosa.controller;
 
 import com.diosa.model.board.Board;
 import com.diosa.model.board.BoardResponse;
+import com.diosa.model.project.Project;
+import com.diosa.model.user.User;
+import com.diosa.model.user.UserPrinciple;
 import com.diosa.service.board.IBoardService;
 import com.diosa.service.project.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin("*")
@@ -19,18 +24,33 @@ public class BoardController {
     @Autowired
     private IBoardService boardService;
 
+    @Autowired
+    private IProjectService projectService;
+
     @GetMapping
     public ResponseEntity<Iterable<Board>> getAll() {
         return new ResponseEntity<>(boardService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long id) {
+    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long id, Authentication authentication) {
+        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+        List<Project> projects = projectService.findProjectByUserId(userPrinciple.getId());
         Optional<Board> boardOptional = boardService.findById(id);
-        if(!boardOptional.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        for (Project project : projects) {
+            if (project.getId().equals(boardOptional.get().getProject().getId())) {
+                return new ResponseEntity<>(boardService.findBoardById(id), HttpStatus.OK);
+            }
         }
-        return new ResponseEntity<>(boardService.findBoardById(id),  HttpStatus.OK);
+        User user = new User();
+        user.setId(userPrinciple.getId());
+        List<Project> myProjects = projectService.findProjectByProjectOwner(user);
+        for (Project project : myProjects) {
+            if (project.getId().equals(boardOptional.get().getProject().getId())) {
+                return new ResponseEntity<>(boardService.findBoardById(id), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping

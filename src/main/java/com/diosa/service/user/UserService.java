@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,5 +50,10 @@ public class UserService implements IUserService {
             throw new UsernameNotFoundException("User not found");
         }
         return UserPrinciple.build(user.get());
+    }
+
+    @Override
+    public List<User> findUsersByProjectId(Long projectId) {
+        return userRepository.findUsersByProjectId(projectId);
     }
 }
