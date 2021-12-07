@@ -16,7 +16,7 @@ public class AssignController {
     private IAssignService assignService;
 
     @PostMapping("/add-member")
-    public ResponseEntity<Assign> addMember(Assign assign){
+    public ResponseEntity<Assign> addMember(@RequestBody Assign assign){
         return new ResponseEntity<>(assignService.save(assign), HttpStatus.OK);
     }
 

@@ -15,4 +15,6 @@ public interface IUserService extends IBaseService<User>, UserDetailsService {
     Optional<User> findByEmail(String email);
 
     List<String> findAllEmail();
+
+    List<User> findAllByBoardId(Long boardId);
 }

@@ -58,6 +58,26 @@ public class StatusService implements IStatusService {
     }
 
     @Override
+    public List<StatusResponse> findByBoardIdAndTitleTask(Long id, String title) {
+        List<Status> statuses =  statusRepository.findAllByBoardIdOrderByPositionAsc(id);
+        List<StatusResponse> statusResponseList = new ArrayList<>();
+        for(Status status : statuses) {
+            StatusResponse statusResponse = convertToStatusResponse(status, title);
+            statusResponseList.add(statusResponse);
+        }
+        return statusResponseList;
+    }
+
+    private StatusResponse convertToStatusResponse(Status status, String title) {
+        StatusResponse statusResponse = new StatusResponse();
+        statusResponse.setId(status.getId());
+        statusResponse.setPosition(status.getPosition());
+        statusResponse.setTitle(status.getTitle());
+        statusResponse.setTasks(taskService.findAllByStatusIdAndTitleContainsOrderByPositionAsc(status.getId(), title));
+        return statusResponse;
+    }
+
+    @Override
     public void deleteAllByBoardId(Long boardId) {
         List<Status> statuses = statusRepository.findAllByBoardId(boardId);
         for (int i = 0; i < statuses.size() ; i++) {

@@ -33,12 +33,17 @@ public class BoardController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long id,
+                                                  @RequestParam String title,
+                                                  Authentication authentication) {
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         List<Project> projects = projectService.findProjectByUserId(userPrinciple.getId());
         Optional<Board> boardOptional = boardService.findById(id);
         for (Project project : projects) {
             if (project.getId().equals(boardOptional.get().getProject().getId())) {
+                if (title != null) {
+                    return new ResponseEntity<>(boardService.findByBoardIdAndTitleTask(id, title), HttpStatus.OK);
+                }
                 return new ResponseEntity<>(boardService.findBoardById(id), HttpStatus.OK);
             }
         }
@@ -47,6 +52,9 @@ public class BoardController {
         List<Project> myProjects = projectService.findProjectByProjectOwner(user);
         for (Project project : myProjects) {
             if (project.getId().equals(boardOptional.get().getProject().getId())) {
+                if (title != null) {
+                    return new ResponseEntity<>(boardService.findByBoardIdAndTitleTask(id, title), HttpStatus.OK);
+                }
                 return new ResponseEntity<>(boardService.findBoardById(id), HttpStatus.OK);
             }
         }

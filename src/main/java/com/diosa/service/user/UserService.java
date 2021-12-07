@@ -66,4 +66,10 @@ public class UserService implements IUserService {
     public List<String>  findAllEmail() {
         return userRepository.findAllEmail();
     }
+
+    @Override
+    public List<User> findAllByBoardId(Long boardId) {
+        return userRepository.findAllByBoardId(boardId);
+    }
+
 }

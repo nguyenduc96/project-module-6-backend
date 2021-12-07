@@ -44,12 +44,17 @@ public class UserController {
         return new ResponseEntity<>(userUniques, HttpStatus.OK);
     }
 
+    @GetMapping("/get-user-by-board/{id}")
+    public ResponseEntity<List<User>> getUserByBoard(@PathVariable Long id) {
+        List<User> users = userService.findAllByBoardId(id);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
     @GetMapping("/get-all-email")
     public ResponseEntity<List<String>> getEmail() {
         List<String> emails = userService.findAllEmail();
         return new ResponseEntity<>(emails, HttpStatus.OK);
     }
-
 
     @PostMapping("/set-avatar")
     public ResponseEntity<User> setAvatar(@RequestBody String avatar, Authentication authentication) {

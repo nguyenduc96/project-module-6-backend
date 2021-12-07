@@ -17,6 +17,8 @@ public interface ITaskRepository extends JpaRepository<Task, Long> {
 
     @Modifying
     @Transactional
-//    @Query(value = "DELETE FROM Task t where t.status_id = ?1", nativeQuery = true)
     void deleteAllByStatusId(Long id);
+
+
+    List<Task> findAllByStatusIdAndTitleContainsOrderByPositionAsc(Long statusId, String title);
 }
