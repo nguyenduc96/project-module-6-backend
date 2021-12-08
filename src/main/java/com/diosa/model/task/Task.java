@@ -29,5 +29,5 @@ public class Task extends Common {
     private Status status;
 
     @ManyToMany
-        private List<Label> labels;
+    private List<Label> labels;
 }

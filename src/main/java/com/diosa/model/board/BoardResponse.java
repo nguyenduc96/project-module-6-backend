@@ -13,7 +13,7 @@ public class BoardResponse {
 
     private String title;
 
-    private Project project;
+    private Long project;
 
     private List<StatusResponse> statuses;
 }

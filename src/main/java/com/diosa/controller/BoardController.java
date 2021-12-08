@@ -3,7 +3,6 @@ package com.diosa.controller;
 import com.diosa.model.board.Board;
 import com.diosa.model.board.BoardResponse;
 import com.diosa.service.board.IBoardService;
-import com.diosa.service.project.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,8 @@ public class BoardController {
         if(!boardOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(boardService.findBoardById(id),  HttpStatus.OK);
+        BoardResponse boardResponse = boardService.findBoardById(id);
+        return new ResponseEntity<>(boardResponse,  HttpStatus.OK);
     }
 
     @PostMapping

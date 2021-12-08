@@ -5,7 +5,6 @@ import com.diosa.model.comment.Comment;
 import com.diosa.model.notification.Notification;
 import com.diosa.service.board.IBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -23,8 +22,9 @@ public class WebSocketController {
 
     @MessageMapping("/board/{id}")
     @SendTo("/topic/board/{id}")
-    public ResponseEntity<BoardResponse> boardSocket(@DestinationVariable Long id) {
-        return new ResponseEntity<>(this.boardService.findBoardById(id) , HttpStatus.OK);
+    public BoardResponse boardSocket(@DestinationVariable Long id) {
+        BoardResponse boardResponse = this.boardService.findBoardById(id);
+        return boardResponse;
     }
 
     @MessageMapping("/notification/board/{id}")
