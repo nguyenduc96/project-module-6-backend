@@ -72,4 +72,8 @@ public class UserService implements IUserService {
         return userRepository.findAllByBoardId(boardId);
     }
 
+    @Override
+    public List<User> findAllByTaskId(Long taskId) {
+        return userRepository.findAllByTaskId(taskId);
+    }
 }
