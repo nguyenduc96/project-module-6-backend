@@ -69,4 +69,5 @@ public class ProjectService implements IProjectService{
     public List<Project> findProjectByProjectOwner(User user) {
         return projectRepository.findAllByProjectOwner(user);
     }
+
 }

@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface ICommentRepository extends JpaRepository<Comment, Long> {
 
+
+
     List<Comment> findAllByTaskId(Long id);
 
     @Modifying

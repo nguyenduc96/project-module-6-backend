@@ -1,4 +1,7 @@
 package com.diosa.service.assign;
 
-public interface IAssignService {
+import com.diosa.model.assign.Assign;
+import com.diosa.service.IBaseService;
+
+public interface IAssignService extends IBaseService<Assign> {
 }

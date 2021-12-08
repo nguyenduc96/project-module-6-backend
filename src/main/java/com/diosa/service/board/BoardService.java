@@ -68,6 +68,26 @@ public class BoardService implements IBoardService{
         return convertToBoardResponse(board);
     }
 
+    @Override
+    public BoardResponse findByBoardIdAndTitleTask(Long boardId, String title) {
+        Board board =  boardRepository.findById(boardId).get();
+        return convertToBoardResponse(board, title);
+    }
+
+    private BoardResponse convertToBoardResponse(Board board, String title) {
+        BoardResponse boardResponse = new BoardResponse();
+        boardResponse.setId(board.getId());
+        boardResponse.setTitle(board.getTitle());
+        boardResponse.setProject(board.getProject().getId());
+        List<StatusResponse> statusResponses = statusService.findByBoardIdAndTitleTask(board.getId(), title);
+        Set<StatusResponse> statusResponseSet = new HashSet<>();
+        for(StatusResponse statusResponse : statusResponses) {
+            statusResponseSet.add(statusResponse);
+        }
+        boardResponse.setStatuses(statusResponseSet);
+        return boardResponse;
+    }
+
     private BoardResponse convertToBoardResponse(Board board) {
         List<StatusResponse> statusResponses = statusService.findByBoardId(board.getId());
         Set<StatusResponse> statusResponseSet = new LinkedHashSet<>();

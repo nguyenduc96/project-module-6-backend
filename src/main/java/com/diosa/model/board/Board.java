@@ -17,6 +17,8 @@ public class Board extends Common {
 
     @ManyToOne
     private Project project;
+
+
 }
 
 

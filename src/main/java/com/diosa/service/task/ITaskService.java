@@ -9,4 +9,6 @@ public interface ITaskService extends IBaseService<Task> {
     List<Task> findAllByStatusIdOrderByPositionAsc(Long statusId);
 
     void deleteAllByStatusId(Long id);
+
+    List<Task> findAllByStatusIdAndTitleContainsOrderByPositionAsc(Long statusId, String title);
 }

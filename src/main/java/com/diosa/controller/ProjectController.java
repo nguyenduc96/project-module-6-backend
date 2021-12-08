@@ -103,7 +103,8 @@ public class ProjectController {
 
     @PutMapping("/{id}/add-user")
     public ResponseEntity<Project> updateProject(@PathVariable Long id,@RequestBody User user, Authentication authentication) {
-        if (!userService.findByUsername(user.getUsername()).isPresent()) {
+        Optional<User> userOptional = userService.findByEmail(user.getEmail());
+        if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
@@ -111,20 +112,26 @@ public class ProjectController {
         if (!projectOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        List<User> usersInProject = userService.findUsersByProjectId(id);
+        for (User userInProject : usersInProject) {
+            if (userInProject.getEmail().equals(user.getEmail())) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+        }
         User user1 = new User();
         user1.setId(userPrinciple.getId());
         List<Project> projects = projectService.findProjectByProjectOwner(user1);
         for (Project project : projects) {
             if (project.getId().equals(id)) {
                 Set<User> users = new HashSet<>();
-                user = userService.findByUsername(user.getUsername()).get();
-                users.add(user);
+                users.add(userOptional.get());
+                users.addAll(usersInProject);
                 projectOptional.get().setUsers(users);
-                return new ResponseEntity<>(projectService.save(projectOptional.get()), HttpStatus.OK);
+                Project p = projectService.save(projectOptional.get());
+                return new ResponseEntity<>(p, HttpStatus.OK);
             }
         }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping("/{id}")
@@ -141,5 +148,15 @@ public class ProjectController {
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{projectId}/get_user")
+    public ResponseEntity<Iterable<User>> getUserByProjectId(@PathVariable Long projectId) {
+        Optional<Project> projectOptional = projectService.findById(projectId);
+        if (!projectOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userService.findUsersByProjectId(projectId), HttpStatus.OK);
+
     }
 }
