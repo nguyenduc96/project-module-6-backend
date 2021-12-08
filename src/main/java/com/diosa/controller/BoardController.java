@@ -7,6 +7,7 @@ import com.diosa.model.user.User;
 import com.diosa.model.user.UserPrinciple;
 import com.diosa.service.board.IBoardService;
 import com.diosa.service.project.IProjectService;
+import com.diosa.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +28,18 @@ public class BoardController {
     @Autowired
     private IProjectService projectService;
 
+    @Autowired
+    private IUserService userService;
+
     @GetMapping
     public ResponseEntity<Iterable<Board>> getAll() {
         return new ResponseEntity<>(boardService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/get-user")
+    public ResponseEntity<List<User>> getAllUser(@PathVariable Long id) {
+        List<User> users = userService.findAllByBoardId(id);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -85,4 +95,5 @@ public class BoardController {
         boardService.remove(id);
         return new ResponseEntity<>(boardOptional.get(), HttpStatus.OK);
     }
+
 }

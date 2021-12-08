@@ -125,8 +125,10 @@ public class ProjectController {
             if (project.getId().equals(id)) {
                 Set<User> users = new HashSet<>();
                 users.add(userOptional.get());
+                users.addAll(usersInProject);
                 projectOptional.get().setUsers(users);
-                return new ResponseEntity<>(projectService.save(projectOptional.get()), HttpStatus.OK);
+                Project p = projectService.save(projectOptional.get());
+                return new ResponseEntity<>(p, HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
@@ -146,5 +148,15 @@ public class ProjectController {
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{projectId}/get_user")
+    public ResponseEntity<Iterable<User>> getUserByProjectId(@PathVariable Long projectId) {
+        Optional<Project> projectOptional = projectService.findById(projectId);
+        if (!projectOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userService.findUsersByProjectId(projectId), HttpStatus.OK);
+
     }
 }
