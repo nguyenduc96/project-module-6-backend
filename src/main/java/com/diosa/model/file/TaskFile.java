@@ -2,6 +2,7 @@ package com.diosa.model.file;
 
 import com.diosa.model.Common;
 import com.diosa.model.task.Task;
+import com.diosa.model.user.User;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,4 +18,7 @@ public class TaskFile extends Common {
 
     @ManyToOne
     private Task task;
+
+    @ManyToOne
+    private User user;
 }
