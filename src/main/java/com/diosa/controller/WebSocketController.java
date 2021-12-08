@@ -17,19 +17,20 @@ import java.util.List;
 @RestController
 @CrossOrigin("*")
 public class WebSocketController {
+
     @Autowired
     private IBoardService boardService;
 
     @MessageMapping("/board/{id}")
     @SendTo("/topic/board/{id}")
     public BoardResponse boardSocket(@DestinationVariable Long id) {
-        BoardResponse boardResponse = this.boardService.findBoardById(id);
-        return boardResponse;
+        BoardResponse boardResponse = boardService.findBoardById(id);
+        return boardService.findBoardById(id);
     }
 
     @MessageMapping("/notification/board/{id}")
     @SendTo("/topic/notification/board/{id}")
-    public ResponseEntity<List<Notification>> notificationSocket(@DestinationVariable Long id) {
+    public ResponseEntity<List<Notification>> notificationSocket(@DestinationVariable Long id, Notification notification) {
         return null;
     }
 
