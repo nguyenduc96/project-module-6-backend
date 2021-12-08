@@ -57,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/**");
 
         http.authorizeRequests()
-                .antMatchers("/user/check-unique", "/user/register", "/user/login").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/**").permitAll()
+//                .anyRequest().authenticated()
                 .and().csrf().disable();
         ;
 
