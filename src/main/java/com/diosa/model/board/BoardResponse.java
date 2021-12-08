@@ -6,6 +6,7 @@ import com.diosa.model.status.StatusResponse;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class BoardResponse {
@@ -15,5 +16,5 @@ public class BoardResponse {
 
     private Long project;
 
-    private List<StatusResponse> statuses;
+    private Set<StatusResponse> statuses;
 }
