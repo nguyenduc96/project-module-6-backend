@@ -14,12 +14,14 @@ public class Notification {
     private Long id;
 
     @ManyToOne
-    private Board board;
-
-    @ManyToOne
     private User sender;
 
     private String action;
 
     private String date;
+
+    @ManyToOne
+    private User receiver;
+
+    private boolean status;
 }

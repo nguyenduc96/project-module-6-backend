@@ -1,5 +1,6 @@
 package com.diosa.service.status;
 
+import com.diosa.model.board.Board;
 import com.diosa.model.status.Status;
 import com.diosa.model.status.StatusResponse;
 import com.diosa.repository.IStatusRepository;
@@ -65,6 +66,18 @@ public class StatusService implements IStatusService {
         }
         statusRepository.deleteAllByBoardId(boardId);
 
+    }
+
+    @Override
+    public Status saveStatusResponse(StatusResponse statusResponse, Long boardId) {
+        Board board = new Board();
+        board.setId(boardId);
+        Status status = new Status();
+        status.setId(statusResponse.getId());
+        status.setTitle(statusResponse.getTitle());
+        status.setPosition(statusResponse.getPosition());
+        status.setBoard(board);
+        return statusRepository.save(status);
     }
 
     private StatusResponse convertToStatusResponse(Status status) {

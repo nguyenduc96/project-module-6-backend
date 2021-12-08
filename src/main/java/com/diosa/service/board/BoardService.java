@@ -2,6 +2,7 @@ package com.diosa.service.board;
 
 import com.diosa.model.board.Board;
 import com.diosa.model.board.BoardResponse;
+import com.diosa.model.project.Project;
 import com.diosa.model.status.StatusResponse;
 import com.diosa.repository.IBoardRepository;
 import com.diosa.service.label.ILabelService;
@@ -9,10 +10,7 @@ import com.diosa.service.status.IStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class BoardService implements IBoardService{
@@ -54,6 +52,17 @@ public class BoardService implements IBoardService{
     }
 
     @Override
+    public Board saveBoardResponse(BoardResponse boardResponse, Long projectId) {
+        Project project = new Project();
+        project.setId(projectId);
+        Board board = new Board();
+        board.setId(boardResponse.getId());
+        board.setTitle(boardResponse.getTitle());
+        board.setProject(project);
+        return boardRepository.save(board);
+    }
+
+    @Override
     public BoardResponse findBoardById(Long boardId) {
         Board board =  boardRepository.findById(boardId).get();
         return convertToBoardResponse(board);
@@ -61,8 +70,8 @@ public class BoardService implements IBoardService{
 
     private BoardResponse convertToBoardResponse(Board board) {
         List<StatusResponse> statusResponses = statusService.findByBoardId(board.getId());
-        Set<StatusResponse> statusResponseSet = new HashSet<>();
-        for(StatusResponse statusResponse : statusResponses) {
+        Set<StatusResponse> statusResponseSet = new LinkedHashSet<>();
+        for (StatusResponse statusResponse : statusResponses) {
             statusResponseSet.add(statusResponse);
         }
         BoardResponse boardResponse = new BoardResponse();
