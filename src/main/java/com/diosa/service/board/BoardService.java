@@ -69,8 +69,13 @@ public class BoardService implements IBoardService{
         BoardResponse boardResponse = new BoardResponse();
         boardResponse.setId(board.getId());
         boardResponse.setTitle(board.getTitle());
-        boardResponse.setProject(board.getProject());
-        boardResponse.setStatuses(statusService.findByBoardIdAndTitleTask(board.getId(), title));
+        boardResponse.setProject(board.getProject().getId());
+        List<StatusResponse> statusResponses = statusService.findByBoardIdAndTitleTask(board.getId(), title);
+        Set<StatusResponse> statusResponseSet = new HashSet<>();
+        for(StatusResponse statusResponse : statusResponses) {
+            statusResponseSet.add(statusResponse);
+        }
+        boardResponse.setStatuses(statusResponseSet);
         return boardResponse;
     }
 
