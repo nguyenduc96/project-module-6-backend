@@ -14,21 +14,21 @@ public class PermissionService implements IPermissionService {
 
     @Override
     public Iterable<Permission> findAll() {
-        return null;
+        return permissionRepository.findAll();
     }
 
     @Override
     public Optional<Permission> findById(Long id) {
-        return Optional.empty();
+        return permissionRepository.findById(id);
     }
 
     @Override
     public Permission save(Permission permission) {
-        return null;
+        return permissionRepository.save(permission);
     }
 
     @Override
     public void remove(Long id) {
-
+        permissionRepository.deleteById(id);
     }
 }

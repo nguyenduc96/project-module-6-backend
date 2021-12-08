@@ -23,6 +23,6 @@ public interface IUserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT u.email FROM user u", nativeQuery = true)
     List<String>  findAllEmail();
 
-    @Query(value = "SELECT * FROM user u JOIN board_permission bp ON u.id = bp.user_id WHERE pb.board_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM user u JOIN board_permission bp ON u.id = bp.user_id WHERE bp.board_id = ?1", nativeQuery = true)
     List<User> findAllByBoardId(Long boardId);
 }
