@@ -38,4 +38,9 @@ public class CommentService implements ICommentService {
     public void deleteByTaskId(Long id) {
         commentRepository.deleteAllByTaskId(id);
     }
+
+    @Override
+    public List<Comment> findAllByTaskId(Long taskId) {
+        return commentRepository.findAllByTaskId(taskId);
+    }
 }
