@@ -53,7 +53,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> findUsersByProjectId(Long projectId) {
+    public Iterable<User> findUsersByProjectId(Long projectId) {
         return userRepository.findUsersByProjectId(projectId);
     }
 }

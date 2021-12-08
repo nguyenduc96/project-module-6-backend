@@ -10,5 +10,4 @@ import java.util.Optional;
 public interface IUserService extends IBaseService<User>, UserDetailsService {
     Optional<User> findByUsername(String username);
 
-    List<User> findUsersByProjectId(Long projectId);
-}
+    Iterable<User> findUsersByProjectId(Long projectId);}

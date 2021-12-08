@@ -142,4 +142,14 @@ public class ProjectController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/{projectId}/get_user")
+    public ResponseEntity<Iterable<User>> getUserByProjectId(@PathVariable Long projectId) {
+        Optional<Project> projectOptional = projectService.findById(projectId);
+        if (!projectOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userService.findUsersByProjectId(projectId), HttpStatus.OK);
+
+    }
 }

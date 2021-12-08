@@ -14,6 +14,6 @@ public interface IUserRepository extends JpaRepository<User, Long> {
     @Transactional
     Optional<User> findByUsername(String username);
 
-    @Query(value = "SELECT * FROM user u JOIN project_users pu ON u.id = pu.users_id WHERE pu.project_id = ?1", nativeQuery = true)
-    List<User> findUsersByProjectId(Long projectId);
+    @Query(value = "SELECT * FROM user u JOIN project_users pu ON u.id = pu.users_id WHERE pu.project_id = ?", nativeQuery = true)
+    Iterable<User> findUsersByProjectId(Long projectId);
 }

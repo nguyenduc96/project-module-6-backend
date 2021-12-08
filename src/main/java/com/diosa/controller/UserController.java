@@ -1,7 +1,9 @@
 package com.diosa.controller;
 
+import com.diosa.model.project.Project;
 import com.diosa.model.user.*;
 import com.diosa.service.JwtService;
+import com.diosa.service.project.IProjectService;
 import com.diosa.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,9 @@ import java.util.*;
 public class UserController {
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IProjectService projectService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
