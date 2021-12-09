@@ -66,9 +66,5 @@ public class CommentController {
         return new ResponseEntity<>(commentService.findAllByTaskId(taskId), HttpStatus.OK);
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Comment> findById(@PathVariable Long id){
-// khong can
-//    }
 
 }
