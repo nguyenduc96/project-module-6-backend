@@ -51,7 +51,7 @@ public class BoardController {
         Optional<Board> boardOptional = boardService.findById(id);
         for (Project project : projects) {
             if (project.getId().equals(boardOptional.get().getProject().getId())) {
-                if (title != null) {
+                if (title != null && !title.isEmpty()) {
                     return new ResponseEntity<>(boardService.findByBoardIdAndTitleTask(id, title), HttpStatus.OK);
                 }
                 return new ResponseEntity<>(boardService.findBoardById(id), HttpStatus.OK);
@@ -62,7 +62,7 @@ public class BoardController {
         List<Project> myProjects = projectService.findProjectByProjectOwner(user);
         for (Project project : myProjects) {
             if (project.getId().equals(boardOptional.get().getProject().getId())) {
-                if (title != null) {
+                if (title != null && !title.isEmpty()) {
                     return new ResponseEntity<>(boardService.findByBoardIdAndTitleTask(id, title), HttpStatus.OK);
                 }
                 return new ResponseEntity<>(boardService.findBoardById(id), HttpStatus.OK);
