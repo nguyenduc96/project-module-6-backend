@@ -6,10 +6,12 @@ import com.diosa.model.notification.Notification;
 import com.diosa.model.status.Status;
 import com.diosa.model.status.StatusResponse;
 import com.diosa.model.task.Task;
+import com.diosa.model.user.User;
 import com.diosa.service.board.IBoardService;
 import com.diosa.service.notification.INotificationService;
 import com.diosa.service.status.IStatusService;
 import com.diosa.service.task.ITaskService;
+import com.diosa.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -19,6 +21,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -39,6 +44,9 @@ public class WebSocketController {
     private INotificationService notificationService;
 
     @Autowired
+    private IUserService userService;
+
+    @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/task/board/{id}")
@@ -57,14 +65,30 @@ public class WebSocketController {
 
     @MessageMapping("/notification/board/{id}")
     public void notificationSocket(@DestinationVariable Long id, Notification notification) {
-        notification.setStatus(false);
-        notificationService.save(notification);
-        simpMessagingTemplate.convertAndSend("/topic/notification/board/user/"+id, notificationService.findAllByReceiverIdOrderByIdDesc(id));
+        List<User> userList = userService.findAllByBoardId(id);
+        for(User user : userList) {
+            if(user.getId() != notification.getSender().getId()) {
+                Notification newNotification = new Notification();
+                newNotification.setSender(notification.getSender());
+                newNotification.setAction(notification.getAction());
+                newNotification.setDate(convertDateToString(new Date()));
+                newNotification.setReceiver(user);
+                newNotification.setStatus(false);
+                notificationService.save(newNotification);
+                simpMessagingTemplate.convertAndSend("/topic/notification/board/user/"+user.getId(), notificationService.findAllByReceiverIdOrderByIdDesc(user.getId()));
+            }
+        }
     }
 
     @MessageMapping("/comment/task/{id}")
     @SendTo("/topic/comment/task/{id}")
     public ResponseEntity<List<Comment>> commentSocket(@DestinationVariable Long id) {
         return null;
+    }
+
+
+    private String convertDateToString(Date date) {
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return formatter.format(date);
     }
 }

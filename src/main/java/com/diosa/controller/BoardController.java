@@ -44,7 +44,7 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponse> getBoard(@PathVariable Long id,
-                                                  @RequestParam String title,
+                                                  @RequestParam(required = false) String title,
                                                   Authentication authentication) {
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         List<Project> projects = projectService.findProjectByUserId(userPrinciple.getId());

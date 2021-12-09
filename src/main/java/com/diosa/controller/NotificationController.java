@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -20,6 +21,12 @@ public class NotificationController {
     @GetMapping("/{id}")
     public ResponseEntity<List<Notification>> getAll(@PathVariable Long id) {
         return new ResponseEntity<>(notificationService.findAllByReceiverIdOrderByIdDesc(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public void readNotification(@PathVariable Long id) {
+        Notification notification = notificationService.findById(id).get();
+        notification.setStatus(true);
     }
 
 }
