@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IBoardPermissionRepository extends JpaRepository<BoardPermission, Long> {
+   BoardPermission findByUserIdAndBoardId(Long userId, Long boardId);
 }

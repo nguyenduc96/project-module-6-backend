@@ -32,6 +32,11 @@ public class PermissionController {
         return new ResponseEntity<>(permissionService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/user/{userId}/board/{boardId}")
+    public ResponseEntity<BoardPermission> findByUserIdAndBoardId(@PathVariable Long userId, @PathVariable Long boardId) {
+        return new ResponseEntity<>(boardPermissionService.findByUserIdAndBoardId(userId,boardId), HttpStatus.OK );
+    }
+
     @PostMapping("/add-board-permission")
     public ResponseEntity<BoardPermission> addBoardPermission(@RequestBody BoardPermission boardPermission) {
         Optional<User> user = userService.findByEmail(boardPermission.getUser().getEmail());
