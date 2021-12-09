@@ -27,6 +27,7 @@ public class NotificationController {
     public void readNotification(@PathVariable Long id) {
         Notification notification = notificationService.findById(id).get();
         notification.setStatus(true);
+        notificationService.save(notification);
     }
 
 }

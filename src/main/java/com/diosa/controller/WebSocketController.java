@@ -7,17 +7,21 @@ import com.diosa.model.status.Status;
 import com.diosa.model.status.StatusResponse;
 import com.diosa.model.task.Task;
 import com.diosa.model.user.User;
+import com.diosa.model.user.UserPrinciple;
 import com.diosa.service.board.IBoardService;
+import com.diosa.service.comment.ICommentService;
 import com.diosa.service.notification.INotificationService;
 import com.diosa.service.status.IStatusService;
 import com.diosa.service.task.ITaskService;
 import com.diosa.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,6 +51,9 @@ public class WebSocketController {
     private IUserService userService;
 
     @Autowired
+    private ICommentService commentService;
+
+    @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/task/board/{id}")
@@ -74,6 +81,7 @@ public class WebSocketController {
                 newNotification.setDate(convertDateToString(new Date()));
                 newNotification.setReceiver(user);
                 newNotification.setStatus(false);
+                newNotification.setLink(notification.getLink());
                 notificationService.save(newNotification);
                 simpMessagingTemplate.convertAndSend("/topic/notification/board/user/"+user.getId(), notificationService.findAllByReceiverIdOrderByIdDesc(user.getId()));
             }
@@ -82,8 +90,10 @@ public class WebSocketController {
 
     @MessageMapping("/comment/task/{id}")
     @SendTo("/topic/comment/task/{id}")
-    public ResponseEntity<List<Comment>> commentSocket(@DestinationVariable Long id) {
-        return null;
+    public List<Comment> commentSocket(@DestinationVariable Long id, Comment comment) {
+        comment.setDate(convertDateToString(new Date()));
+        commentService.save(comment);
+        return commentService.findAllByTaskId(id);
     }
 
 

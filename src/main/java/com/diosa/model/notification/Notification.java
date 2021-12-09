@@ -24,4 +24,6 @@ public class Notification {
     private User receiver;
 
     private boolean status;
+
+    private String link;
 }
