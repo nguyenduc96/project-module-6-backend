@@ -25,4 +25,7 @@ public interface IUserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM user u JOIN board_permission bp ON u.id = bp.user_id WHERE bp.board_id = ?1", nativeQuery = true)
     List<User> findAllByBoardId(Long boardId);
+
+    @Query(value = "SELECT * FROM user u JOIN assign a ON u.id = a.user_id WHERE a.task_id = ?1", nativeQuery = true)
+    List<User> findAllByTaskId(Long taskId);
 }
