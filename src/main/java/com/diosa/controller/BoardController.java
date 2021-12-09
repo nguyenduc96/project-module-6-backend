@@ -87,7 +87,8 @@ public class BoardController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Board> delete(@PathVariable Long id) {
+    public ResponseEntity<Board> delete(@PathVariable Long id, Authentication authentication) {
+        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         Optional<Board> boardOptional = boardService.findById(id);
         if (!boardOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

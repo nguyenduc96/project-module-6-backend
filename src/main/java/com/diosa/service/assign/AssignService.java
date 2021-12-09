@@ -31,4 +31,9 @@ public class AssignService implements IAssignService {
     public void remove(Long id) {
         assignRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteAssign(Long userId, Long taskId) {
+        assignRepository.deleteAssign(userId, taskId);
+    }
 }

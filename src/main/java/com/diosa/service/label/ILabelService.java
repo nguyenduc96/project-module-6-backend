@@ -9,4 +9,6 @@ public interface ILabelService extends IBaseService<Label> {
     List<Label> findAllByBoardId(Long id);
 
     void deleteAllByBoardId(Long id);
+
+    List<Label> findAllByTaskId(Long id);
 }

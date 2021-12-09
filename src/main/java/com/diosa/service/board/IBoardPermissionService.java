@@ -5,5 +5,6 @@ import com.diosa.service.IBaseService;
 
 public interface IBoardPermissionService extends IBaseService<BoardPermission> {
 
+    void deleteByUserIdAndBoardId(Long userId, Long boardId);
 
 }
