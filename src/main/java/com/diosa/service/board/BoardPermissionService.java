@@ -31,4 +31,14 @@ public class BoardPermissionService implements IBoardPermissionService{
     public void remove(Long id) {
         boardPermissionRepository.deleteById(id);
     }
+
+    @Override
+    public BoardPermission findByUserIdAndBoardId(Long userId, Long boardId) {
+        return boardPermissionRepository.findByUserIdAndBoardId(userId, boardId);
+    }
+
+    @Override
+    public void deleteByUserIdAndBoardId(Long userId, Long boardId) {
+        boardPermissionRepository.deleteByUserIdAndBoardId(userId, boardId);
+    }
 }

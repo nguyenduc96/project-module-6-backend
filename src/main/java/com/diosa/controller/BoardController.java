@@ -36,6 +36,7 @@ public class BoardController {
         return new ResponseEntity<>(boardService.findAll(), HttpStatus.OK);
     }
 
+
     @GetMapping("/{id}/get-user")
     public ResponseEntity<List<User>> getAllUser(@PathVariable Long id) {
         List<User> users = userService.findAllByBoardId(id);
@@ -51,7 +52,7 @@ public class BoardController {
         Optional<Board> boardOptional = boardService.findById(id);
         for (Project project : projects) {
             if (project.getId().equals(boardOptional.get().getProject().getId())) {
-                if (title != null) {
+                if (title != null && !title.isEmpty()) {
                     return new ResponseEntity<>(boardService.findByBoardIdAndTitleTask(id, title), HttpStatus.OK);
                 }
                 return new ResponseEntity<>(boardService.findBoardById(id), HttpStatus.OK);
@@ -62,7 +63,7 @@ public class BoardController {
         List<Project> myProjects = projectService.findProjectByProjectOwner(user);
         for (Project project : myProjects) {
             if (project.getId().equals(boardOptional.get().getProject().getId())) {
-                if (title != null) {
+                if (title != null && !title.isEmpty()) {
                     return new ResponseEntity<>(boardService.findByBoardIdAndTitleTask(id, title), HttpStatus.OK);
                 }
                 return new ResponseEntity<>(boardService.findBoardById(id), HttpStatus.OK);
@@ -87,7 +88,8 @@ public class BoardController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Board> delete(@PathVariable Long id) {
+    public ResponseEntity<Board> delete(@PathVariable Long id, Authentication authentication) {
+        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         Optional<Board> boardOptional = boardService.findById(id);
         if (!boardOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

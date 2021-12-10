@@ -80,7 +80,7 @@ public class BoardService implements IBoardService{
         boardResponse.setTitle(board.getTitle());
         boardResponse.setProject(board.getProject().getId());
         List<StatusResponse> statusResponses = statusService.findByBoardIdAndTitleTask(board.getId(), title);
-        Set<StatusResponse> statusResponseSet = new HashSet<>();
+        Set<StatusResponse> statusResponseSet = new LinkedHashSet<>();
         for(StatusResponse statusResponse : statusResponses) {
             statusResponseSet.add(statusResponse);
         }
