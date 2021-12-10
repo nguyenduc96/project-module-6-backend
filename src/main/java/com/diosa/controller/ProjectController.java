@@ -95,8 +95,9 @@ public class ProjectController {
                 projectOptional.get().setTitle(project.getTitle());
                 projectOptional.get().setType(project.getType());
                 projectOptional.get().setUpdateAt(convertDateToString(new Date()));
+                return new ResponseEntity<>(projectService.save(projectOptional.get()), HttpStatus.OK);
             }
-            return new ResponseEntity<>(projectService.save(projectOptional.get()), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
