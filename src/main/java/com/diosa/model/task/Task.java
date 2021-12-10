@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -29,5 +30,5 @@ public class Task extends Common {
     private Status status;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Label> labels;
+    private Set<Label> labels;
 }

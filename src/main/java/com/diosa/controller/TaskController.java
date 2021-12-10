@@ -1,7 +1,9 @@
 package com.diosa.controller;
 
+import com.diosa.model.label.Label;
 import com.diosa.model.status.Status;
 import com.diosa.model.task.Task;
+import com.diosa.service.label.ILabelService;
 import com.diosa.service.status.IStatusService;
 import com.diosa.service.task.ITaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @CrossOrigin("*")
@@ -18,6 +22,9 @@ import java.util.Optional;
 public class TaskController {
     @Autowired
     private ITaskService taskService;
+
+    @Autowired
+    private ILabelService labelService;
 
     @GetMapping
     public ResponseEntity<Iterable<Task>> findAll() {
@@ -56,6 +63,10 @@ public class TaskController {
         if(!taskOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        Set<Label> labels = new HashSet<>();
+        labels.addAll(taskOptional.get().getLabels());
+        labels.addAll(task.getLabels());
+        task.setLabels(labels);
         task.setId(id);
         return new ResponseEntity<>(taskService.save(task), HttpStatus.OK);
     }
@@ -69,4 +80,11 @@ public class TaskController {
         taskService.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/{id}/get-label")
+    public ResponseEntity<List<Label>> getLabel(@PathVariable Long id) {
+        List<Label> labels = labelService.findAllByTaskId(id);
+        return new ResponseEntity<>(labels, HttpStatus.OK);
+    }
+
 }

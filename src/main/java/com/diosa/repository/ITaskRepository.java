@@ -19,6 +19,5 @@ public interface ITaskRepository extends JpaRepository<Task, Long> {
     @Transactional
     void deleteAllByStatusId(Long id);
 
-
     List<Task> findAllByStatusIdAndTitleContainsOrderByPositionAsc(Long statusId, String title);
 }

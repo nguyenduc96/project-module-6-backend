@@ -43,4 +43,9 @@ public class LabelService implements ILabelService{
     public void deleteAllByBoardId(Long id) {
         labelRepository.deleteAllByBoardId(id);
     }
+
+    @Override
+    public List<Label> findAllByTaskId(Long id) {
+        return labelRepository.findAllByTaskId(id);
+    }
 }
