@@ -28,6 +28,6 @@ public class Task extends Common {
     @ManyToOne
     private Status status;
 
-    @ManyToMany
-        private List<Label> labels;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Label> labels;
 }

@@ -19,29 +19,22 @@ public class TaskController {
     @Autowired
     private ITaskService taskService;
 
-//    @Autowired
-//    private IStatusService statusService;
-
     @GetMapping
     public ResponseEntity<Iterable<Task>> findAll() {
         return new ResponseEntity<>(taskService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/status/{statusId}")
-    public ResponseEntity<List<Task>> findByStatusId(@PathVariable Long statusId){
-        return new ResponseEntity<>(taskService.findAllByStatusIdOrderByPositionAsc(statusId), HttpStatus.OK);
+    public ResponseEntity<List<Task>> findByStatusId(@PathVariable Long statusId,
+                                                     @RequestParam(required = false) String title){
+        List<Task> tasks;
+        if(title != null) {
+            tasks = taskService.findAllByStatusIdAndTitleContainsOrderByPositionAsc(statusId, title);
+        } else {
+            tasks = taskService.findAllByStatusIdOrderByPositionAsc(statusId);
+        }
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
-//
-//    @PostMapping("/status/{statusId}")
-//    public ResponseEntity<Task> dropTask(@PathVariable Long statusId, @RequestBody Task task) {
-//        Optional<Status> status = statusService.findById(statusId);
-//        if(!status.isPresent()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        task.setStatus(status.get());
-//        Task task1 = taskService.save(task);
-//        return new ResponseEntity<>(task1, HttpStatus.OK);
-//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Task> findById(@PathVariable Long id) {

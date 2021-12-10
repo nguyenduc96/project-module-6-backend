@@ -1,11 +1,10 @@
 package com.diosa.model.board;
 
-import com.diosa.model.project.Project;
-import com.diosa.model.status.Status;
 import com.diosa.model.status.StatusResponse;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
+
 
 @Data
 public class BoardResponse {
@@ -13,7 +12,7 @@ public class BoardResponse {
 
     private String title;
 
-    private Project project;
+    private Long project;
 
-    private List<StatusResponse> statuses;
+    private Set<StatusResponse> statuses;
 }

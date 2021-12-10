@@ -6,7 +6,6 @@ import com.diosa.model.user.User;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Data
@@ -15,9 +14,9 @@ public class Assign extends Common {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     private Task task;
 
-    @ManyToMany
-    private List<User> users;
+    @ManyToOne
+    private User user;
 }

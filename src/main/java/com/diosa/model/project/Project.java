@@ -22,6 +22,6 @@ public class Project extends Common {
     @ManyToOne
     private User projectOwner;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> users;
 }

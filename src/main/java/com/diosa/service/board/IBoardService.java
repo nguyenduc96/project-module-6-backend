@@ -10,4 +10,8 @@ public interface IBoardService extends IBaseService<Board> {
     BoardResponse findBoardById(Long boardId);
 
     List<Board> findAllByProjectId(Long projectId);
+
+    Board saveBoardResponse(BoardResponse boardResponse, Long projectId);
+
+    BoardResponse findByBoardIdAndTitleTask(Long boardId, String title);
 }

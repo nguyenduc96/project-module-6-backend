@@ -1,5 +1,6 @@
 package com.diosa.service.status;
 
+import com.diosa.model.board.Board;
 import com.diosa.model.status.Status;
 import com.diosa.model.status.StatusResponse;
 import com.diosa.repository.IStatusRepository;
@@ -58,6 +59,26 @@ public class StatusService implements IStatusService {
     }
 
     @Override
+    public List<StatusResponse> findByBoardIdAndTitleTask(Long id, String title) {
+        List<Status> statuses =  statusRepository.findAllByBoardIdOrderByPositionAsc(id);
+        List<StatusResponse> statusResponseList = new ArrayList<>();
+        for(Status status : statuses) {
+            StatusResponse statusResponse = convertToStatusResponse(status, title);
+            statusResponseList.add(statusResponse);
+        }
+        return statusResponseList;
+    }
+
+    private StatusResponse convertToStatusResponse(Status status, String title) {
+        StatusResponse statusResponse = new StatusResponse();
+        statusResponse.setId(status.getId());
+        statusResponse.setPosition(status.getPosition());
+        statusResponse.setTitle(status.getTitle());
+        statusResponse.setTasks(taskService.findAllByStatusIdAndTitleContainsOrderByPositionAsc(status.getId(), title));
+        return statusResponse;
+    }
+
+    @Override
     public void deleteAllByBoardId(Long boardId) {
         List<Status> statuses = statusRepository.findAllByBoardId(boardId);
         for (int i = 0; i < statuses.size() ; i++) {
@@ -65,6 +86,18 @@ public class StatusService implements IStatusService {
         }
         statusRepository.deleteAllByBoardId(boardId);
 
+    }
+
+    @Override
+    public Status saveStatusResponse(StatusResponse statusResponse, Long boardId) {
+        Board board = new Board();
+        board.setId(boardId);
+        Status status = new Status();
+        status.setId(statusResponse.getId());
+        status.setTitle(statusResponse.getTitle());
+        status.setPosition(statusResponse.getPosition());
+        status.setBoard(board);
+        return statusRepository.save(status);
     }
 
     private StatusResponse convertToStatusResponse(Status status) {

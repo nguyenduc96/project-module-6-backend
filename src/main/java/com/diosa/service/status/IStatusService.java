@@ -12,5 +12,9 @@ public interface IStatusService extends IBaseService<Status> {
 
     List<StatusResponse> findByBoardId(Long id);
 
+    List<StatusResponse> findByBoardIdAndTitleTask(Long id, String title);
+
     void deleteAllByBoardId(Long boardId);
+
+    Status saveStatusResponse(StatusResponse statusResponse, Long boardId);
 }

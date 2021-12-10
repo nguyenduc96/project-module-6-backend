@@ -57,4 +57,9 @@ public class TaskService implements ITaskService{
         }
         taskRepository.deleteAllByStatusId(id);
     }
+
+    @Override
+    public List<Task> findAllByStatusIdAndTitleContainsOrderByPositionAsc(Long statusId, String title) {
+        return taskRepository.findAllByStatusIdAndTitleContainsOrderByPositionAsc(statusId, title);
+    }
 }
