@@ -5,6 +5,7 @@ import com.diosa.model.user.User;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ public class Project extends Common {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
     private String title;
 
     private Long type;
