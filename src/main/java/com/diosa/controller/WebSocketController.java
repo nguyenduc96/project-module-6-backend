@@ -3,6 +3,7 @@ package com.diosa.controller;
 import com.diosa.model.board.BoardResponse;
 import com.diosa.model.comment.Comment;
 import com.diosa.model.notification.Notification;
+import com.diosa.model.permission.BoardPermission;
 import com.diosa.model.status.Status;
 import com.diosa.model.status.StatusResponse;
 import com.diosa.model.task.Task;
@@ -87,6 +88,20 @@ public class WebSocketController {
                 simpMessagingTemplate.convertAndSend("/topic/notification/board/user/"+user.getId(), notificationService.findAllByReceiverIdOrderByIdDesc(user.getId()));
             }
         }
+    }
+
+    @MessageMapping("/notification/one")
+    public void notiOneSocket( Notification notification) {
+        User user = userService.findByEmail(notification.getReceiver().getEmail()).get();
+        Notification newNotification = new Notification();
+        newNotification.setSender(notification.getSender());
+        newNotification.setAction(notification.getAction());
+        newNotification.setDate(convertDateToString(new Date()));
+        newNotification.setReceiver(user);
+        newNotification.setStatus(false);
+        newNotification.setLink(notification.getLink());
+        notificationService.save(newNotification);
+        simpMessagingTemplate.convertAndSend("/topic/notification/board/user/"+user.getId(), notificationService.findAllByReceiverIdOrderByIdDesc(user.getId()));
     }
 
     @MessageMapping("/comment/task/{id}")

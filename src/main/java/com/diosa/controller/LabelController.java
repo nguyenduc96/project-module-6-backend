@@ -52,6 +52,8 @@ public class LabelController {
         }
         if (label.getColor().getId() == null) {
             label.getColor().setId(1L);
+        }if (label.getContent()  == null) {
+            label.setContent(labelOptional.get().getContent());
         }
         if (!labelOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

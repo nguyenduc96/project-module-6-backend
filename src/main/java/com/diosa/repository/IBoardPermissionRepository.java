@@ -12,7 +12,6 @@ import javax.transaction.Transactional;
 @Repository
 public interface IBoardPermissionRepository extends JpaRepository<BoardPermission, Long> {
    BoardPermission findByUserIdAndBoardId(Long userId, Long boardId);
-}
 
     @Modifying
     @Transactional
